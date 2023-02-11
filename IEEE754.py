@@ -149,7 +149,7 @@ def create_components_tab1(tab):
     ieee = ttk.Entry(tab1_frame, state='readonly', textvariable=final_out, justify=tk.CENTER)
     ieee.grid(row=11, column=1, columnspan=6, sticky='WE')
 
-    space = ttk.Label(tab1_frame, text='')
+    space = ttk.Label(tab1_frame, text='By LDE', justify=tk.RIGHT)
     space.grid(row=12, column=0, sticky='WE')
 
 
