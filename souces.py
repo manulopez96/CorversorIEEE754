@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
-number_iee754 = 0
+number_iee754 = '0'
 
 
-def get_value(enter_sign, enter_exp, enter_mant):
+def get_value(enter_sign, enter_exp, enter_mant, tab):
     print(f'- Sign: {enter_sign.get()}\n'
           f'- Exp: {enter_exp.get()}\n'
           f'- Man: {enter_mant.get()}')
@@ -36,6 +36,7 @@ def get_value(enter_sign, enter_exp, enter_mant):
     to_decimal(sign, exp, mant)
     print('\n\n', number_iee754)
     # print(f'final_out: {str(number_iee754)}')
+    create_components_tab1(tab)
 
 
 def to_decimal(_sign, _exp, _mant):
@@ -132,20 +133,24 @@ def create_components_tab1(tab):
     space.grid(row=5, column=0, sticky='WE')
     space = ttk.Label(tab1_frame, text='')
     space.grid(row=6, column=0, sticky='WE')
-    space = ttk.Label(tab1_frame, text='')
-    space.grid(row=10, column=0, sticky='WE')
-
-    button = ttk.Button(tab1_frame, text='Calculate', command=lambda: get_value(enter_sign, enter_exp, enter_mant))
-    button.grid(row=9, column=3, padx=50)
 
     print(f'final_out: {str(number_iee754)}')
     final_out = tk.StringVar()
     final_out.set(str(number_iee754))
-    ieee = ttk.Entry(tab1_frame, state='readonly', textvariable=final_out, justify=tk.CENTER)
-    ieee.grid(row=11, column=1, columnspan=6, sticky='WE')
+    ieee = tk.Entry(tab1_frame, state='readonly', textvariable=final_out, justify=tk.CENTER)
+    ieee.grid(row=7, column=1, columnspan=6, sticky='WE')
+
+    space = ttk.Label(tab1_frame, text='', justify=tk.RIGHT)
+    space.grid(row=8, column=10, sticky='E')
+
+    button = ttk.Button(tab1_frame, text='Calculate', command=lambda: get_value(enter_sign, enter_exp, enter_mant, tab))
+    button.grid(row=9, column=3, padx=50)
 
     space = ttk.Label(tab1_frame, text='By LDE', justify=tk.RIGHT)
-    space.grid(row=12, column=10, sticky='E')
+    space.grid(row=10, column=10, sticky='E')
+
+    space = ttk.Label(tab1_frame, text='', justify=tk.RIGHT)
+    space.grid(row=11, column=10, sticky='E')
 
 
 def create_components_tab2(tab):
