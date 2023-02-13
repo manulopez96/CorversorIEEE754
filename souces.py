@@ -1,9 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
-number_iee754 = '0'
 
 
-def get_value(enter_sign, enter_exp, enter_mant, tab):
+def get_value(final_out, enter_sign, enter_exp, enter_mant):
     print(f'- Sign: {enter_sign.get()}\n'
           f'- Exp: {enter_exp.get()}\n'
           f'- Man: {enter_mant.get()}')
@@ -19,7 +18,6 @@ def get_value(enter_sign, enter_exp, enter_mant, tab):
         exp = -1023
         print(f'Exp without value = {exp}')
     else:
-        # exp = int(enter_exp.get())
         exp = int(enter_exp.get(), 2)
         print(f'Exp with value = {exp}')
         exp -= 1023
@@ -33,49 +31,42 @@ def get_value(enter_sign, enter_exp, enter_mant, tab):
         mant += ('0' * (52 - len(mant)))
         print(f'Mant with value = {mant}')
 
-    to_decimal(sign, exp, mant)
-    print('\n\n', number_iee754)
-    # print(f'final_out: {str(number_iee754)}')
-    create_components_tab1(tab)
+    to_decimal(final_out, sign, exp, mant)
 
 
-def to_decimal(_sign, _exp, _mant):
+def to_decimal(final_out, _sign, _exp, _mant):
     _float = _mant
     # implicit bit
     _integer = '1'
 
-    if _exp < 0:
-        for i in range((-1*_exp)):
-            _float = _integer[-1] + _float[:]
-            _integer = '0' + _integer[:-1]
-            # print(f'entero: {_integer}\n'
-            #       f'flotante: {_float}\n'
-            #       f'I: {i}\n')
+    if _mant != ('0'*52) or _exp != (-1023):
+        if _exp < 0:
+            for i in range((-1*_exp)):
+                _float = _integer[-1] + _float[:]
+                _integer = '0' + _integer[:-1]
+        else:
+            for i in range(_exp):
+                _integer += _float[0]
+                _float = _float[1:] + '0'
+
+        _integer = int(_integer, 2)
+        _decimal = 0
+        for i in range(len(_float)):
+            _aux = ((2*int(_float[i]))**(i+1))
+            if _aux != 0:
+                _decimal += 1/_aux
+                print(f'Aux= {_aux}    '
+                      f'decimal= {_decimal}')
+        int(_decimal)
+        print(f'Entero: {_integer}\n'
+              f'_decimal: {_decimal}\n')
+
+        number_iee754 = _integer + _decimal
+        if _sign == 1:
+            number_iee754 = number_iee754 * (-1)
+        final_out.set(str(number_iee754))
     else:
-        for i in range(_exp):
-            _integer += _float[0]
-            _float = _float[1:] + '0'
-            # print(f'Entero: {_integer}\n'
-            #       f'flotante: {_float}\n'
-            #       f'I: {i}\n')
-
-    _integer = int(_integer, 2)
-    _decimal = 0
-    for i in range(len(_float)):
-        _aux = ((2*int(_float[i]))**(i+1))
-        if _aux != 0:
-            _decimal += 1/_aux
-            print(f'Aux= {_aux}    '
-                  f'decimal= {_decimal}')
-    int(_decimal)
-    print(f'Entero: {_integer}\n'
-          f'_decimal: {_decimal}\n')
-
-    global number_iee754
-    number_iee754 = _integer + _decimal
-    if _sign == 1:
-        number_iee754 = number_iee754 * (-1)
-    # final_out.set(str(number_iee754))
+        final_out.set('0')
 
 
 def limit_entry(l_entry, limit):
@@ -91,6 +82,7 @@ def limit_entry(l_entry, limit):
 
 
 def create_components_tab1(tab):
+    final_out = tk.StringVar()
     tab1_frame = ttk.Frame(tab, width=850, height=250)
     tab1_frame.pack()
     space = ttk.Label(tab1_frame, text='')
@@ -134,16 +126,17 @@ def create_components_tab1(tab):
     space = ttk.Label(tab1_frame, text='')
     space.grid(row=6, column=0, sticky='WE')
 
-    print(f'final_out: {str(number_iee754)}')
-    final_out = tk.StringVar()
-    final_out.set(str(number_iee754))
+    print(f'final_out: {final_out.get()}')
+    print(f'final_out type: {type(final_out.get())}')
+    print(f'final_out type: {type(final_out)}')
     ieee = tk.Entry(tab1_frame, state='readonly', textvariable=final_out, justify=tk.CENTER)
     ieee.grid(row=7, column=1, columnspan=6, sticky='WE')
 
     space = ttk.Label(tab1_frame, text='', justify=tk.RIGHT)
     space.grid(row=8, column=10, sticky='E')
 
-    button = ttk.Button(tab1_frame, text='Calculate', command=lambda: get_value(enter_sign, enter_exp, enter_mant, tab))
+    button = ttk.Button(tab1_frame, text='Calculate',
+                        command=lambda: get_value(final_out, enter_sign, enter_exp, enter_mant))
     button.grid(row=9, column=3, padx=50)
 
     space = ttk.Label(tab1_frame, text='By LDE', justify=tk.RIGHT)

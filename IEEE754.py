@@ -17,7 +17,7 @@ create_components_tab1(tab1)
 
 # create tab 2
 tab2 = ttk.Frame(control_tab)
-control_tab.add(tab2, text='Float to IEEE754')
-create_components_tab2(tab2)
+# control_tab.add(tab2, text='Float to IEEE754')
+# create_components_tab2(tab2)
 
 root.mainloop()
