@@ -1,2 +1,1 @@
-# CorversorIEEE754
-Calculator IEEE754
+Conversion from IEEE754 to decimal and vice versa
